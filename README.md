@@ -1,4 +1,4 @@
-~~# web-redis-viewer
+> 只有web ui的壳，数据完全从接口读取
 
 > 为了绕过公司堡垒机实现调试redis功能改造而来
 
