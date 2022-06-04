@@ -249,12 +249,12 @@ export class WebApiRedisClient extends Event {
       options = key;
       key = null;
     }
-    return new WebApiScanStream({
+    return new WebApiScanStream(Object.assign({
       objectMode: true,
       key,
       redis: this,
       command,
-    }, options);
+    }, options));
   }
 }
 
