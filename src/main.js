@@ -29,11 +29,3 @@ new Vue({
   components: { App },
   template: '<App/>',
 });
-
-// handle uncaught exception
-process.on('uncaughtException', (err, origin) => {
-  if (!err) {
-    return;
-  }
-  console.error(err, origin);
-});
