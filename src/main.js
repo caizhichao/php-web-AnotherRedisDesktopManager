@@ -46,9 +46,10 @@ Vue.use(ElementUI, { size: 'small' });
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
-new Vue({
+const vue = new Vue({
   el: '#app',
   i18n,
   components: { App },
   template: '<App/>',
 });
+export default vue;

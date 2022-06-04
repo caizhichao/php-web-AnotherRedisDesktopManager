@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import { Readable } from 'stream';
 import util from './util';
+import vue from './main';
+import { writeCMD } from './commands';
 
 
 export class Event {
@@ -236,12 +238,12 @@ export class WebApiRedisClient extends Event {
     return this.__scanPackage('scan', scanOption);
   }
 
-  sscanBufferStream(scanOption) {
-    return this.__scanPackage('sscan', scanOption);
+  sscanBufferStream(key, scanOption) {
+    return this.__scanPackage('sscan', key, scanOption);
   }
 
-  hscanBufferStream(scanOption) {
-    return this.__scanPackage('hscan', scanOption);
+  hscanBufferStream(key, scanOption) {
+    return this.__scanPackage('hscan', key, scanOption);
   }
 
   __scanPackage(command, key, options) {
@@ -271,6 +273,10 @@ WebApi.redisInvoke = async function (connConfig, command, ...params) {
   params.map((it, index) => {
     params[index] = util.bufToString(it);
   });
+  if (connConfig.connectionReadOnly && writeCMD[command.toUpperCase()]) {
+    throw new Error('You are in readonly mode! Unable to execute write command!');
+  }
+  const start = performance.now();
   const r1 = await fetch('/api.php?func=redisInvoke', {
     method: 'POST',
     headers: {
@@ -284,7 +290,19 @@ WebApi.redisInvoke = async function (connConfig, command, ...params) {
   });
   const text = await r1.text();
   console.log('tag:redisInvoke', command, params, text);
+  const cost = performance.now() - start;
+  const record = {
+    time: new Date(),
+    connectionName: connConfig.connectionName,
+    command: {
+      name: command,
+      args: params,
+    },
+    cost,
+  };
+  vue.$bus.$emit('commandLog', record);
   return JSON.parse(text);
 };
+
 
 export default WebApi;
