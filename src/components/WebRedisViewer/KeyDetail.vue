@@ -2,7 +2,6 @@
   <div>
     <el-container direction="vertical" class="key-tab-container">
       <!-- key info -->
-      <el-input></el-input>
       <KeyHeader
         ref="keyHeader"
         :client='client'
