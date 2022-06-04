@@ -22,13 +22,44 @@ class Api
     $connConfig = $body['connConfig'];
     $redis = new Redis();
     $redis->connect('127.0.0.1');
-    $writeCommand = ['set'，'del','persist','expire','hset','call','lpush','rpush','sadd','hdel','rename','srem','zrem','zadd','lrem'];
-    $readCommand = ['scan','info','type'，'ttl','hlen','hscan','get','exists','llen','lrange','sscan','zcard','scard','zrevrange'];
+   $writeCommand = [
+               'set',
+               'del',
+               'persist',
+               'expire',
+               'hset',
+               'call',
+               'lpush',
+               'rpush',
+               'sadd',
+               'hdel',
+               'rename',
+               'srem',
+               'zrem',
+               'zadd',
+               'lrem'
+           ];
+           $readCommand = [
+               'scan',
+               'info',
+               'type',
+               'ttl',
+               'hlen',
+               'hscan',
+               'get',
+               'exists',
+               'llen',
+               'lrange',
+               'sscan',
+               'zcard',
+               'scard',
+               'zrevrange'
+           ];
 
-    if(!in_array($command, $writeCommand)
-     || !in_array($command, $readCommand)){
-         return 'no allow command=[' . $command . ']';
-    }
+           if (!in_array($command, $writeCommand)
+               || !in_array($command, $readCommand)) {
+               return 'no allow command=[' . $command . ']';
+           }
 
     $redis->setOption(Redis::OPT_REPLY_LITERAL, 1);
     return $redis->rawCommand($command, ...$params);
