@@ -1,31 +1,42 @@
 <template>
   <div>
     <!-- </textarea> -->
-    <el-input ref='textInput' :disabled='disabled' type='textarea' :value='contentDisplay'></el-input>
+    <el-input ref='textInput' :disabled='disabled' type='textarea' :value='contentDisplay' @input="inputContent"></el-input>
   </div>
 </template>
 
 <script type="text/javascript">
 export default {
   props: ['content', 'contentVisible', 'disabled'],
-  computed: {
-    contentDisplay() {
-      return this.$util.bufToBinary(this.content);
-    },
+  data() {
+    return {
+      contentDisplay: '',
+    };
   },
+
   watch: {
     content() {
+      this.initContentDisplay();
       // refresh
-      this.$nextTick(() => {
-        this.$refs.textInput.$refs.textarea.value = this.contentDisplay;
-      });
+      // this.$nextTick(() => {
+      //   this.$refs.textInput.$refs.textarea.value = this.contentDisplay;
+      // });
     },
   },
+  mounted() {
+    this.initContentDisplay();
+  },
   methods: {
+    initContentDisplay() {
+      this.contentDisplay = this.$util.bufToBinary(this.content);
+    },
     getContent() {
       const content = this.$refs.textInput.$refs.textarea.value;
       return this.$util.binaryStringToBuffer(content);
     },
+    inputContent(value) {
+      this.contentDisplay = value;
+    },
   },
-}
+};
 </script>
