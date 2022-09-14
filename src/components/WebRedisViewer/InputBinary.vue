@@ -1,15 +1,15 @@
 <template>
   <div>
     <el-tag v-if="!buffVisible" class='input-binary-tag' size="mini">[Hex]</el-tag>
-    <el-input :disabled='disabled' :value='contentDisplay' @change="updateContent($event)"></el-input>
+    <el-input :disabled='disabled' :value='contentDisplay' @input="updateContent($event)"></el-input>
   </div>
 </template>
 
 <script type="text/javascript">
 export default {
   props: {
-    content: {default: () => Buffer.from('')},
-    disabled: {type: Boolean, default: false},
+    content: { default: () => Buffer.from('') },
+    disabled: { type: Boolean, default: false },
   },
   computed: {
     contentDisplay() {
@@ -29,11 +29,11 @@ export default {
   },
   methods: {
     updateContent(value) {
-      let newContent = this.buffVisible ? Buffer.from(value) : this.$util.xToBuffer(value);
+      const newContent = this.buffVisible ? Buffer.from(value) : this.$util.xToBuffer(value);
       this.$emit('update:content', newContent);
     },
   },
-}
+};
 </script>
 
 <style type="text/css">
